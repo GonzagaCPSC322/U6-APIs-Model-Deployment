@@ -1,7 +1,7 @@
 import requests # lib for making requests
 import json # lib for parsing strings/JSON objects
 
-url = "https://itunes.apple.com/search?term=thor&media=movie"
+url = "https://interview-flask-app.herokuapp.com/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
 
 # make the GET request
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
@@ -17,10 +17,3 @@ if status_code == 200:
     # success! can grab message body 
     json_object = json.loads(response.text)
     print(json_object)
-    results_array = json_object["results"]
-    for result in results_array:
-        #print("result:", result, "\n")
-        # task: print out the name and run time (duration) in hours
-        name = result["trackName"]
-        duration = result["trackTimeMillis"]
-        print(name, ":", duration)
