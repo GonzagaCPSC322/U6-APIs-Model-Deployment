@@ -1,7 +1,8 @@
 import requests # lib for making requests
 import json # lib for parsing strings/JSON objects
 
-url = "https://interview-flask-app.herokuapp.com/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
+# url = "https://interview-flask-app.herokuapp.com/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
+url = "http://127.0.0.1:5000/predict?level=Junior&lang=Java&tweets=yes&phd=yes"
 
 # make the GET request
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
