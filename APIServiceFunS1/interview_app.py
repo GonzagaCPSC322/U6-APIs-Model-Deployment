@@ -1,6 +1,7 @@
 # we are going to use a micro web framework called Flask
 # to create our web app (for running an API service)
 import os 
+import pickle 
 from flask import Flask, jsonify, request 
 
 # by default flask runs on port 5000
@@ -29,8 +30,48 @@ def predict():
     # level, lang, tweets, phd
     # make a prediction with the tree
     # respond to the client with the prediction in a JSON object
-    result = {"prediction": "True"} # TODO: fix hardcoding
-    return jsonify(result), 200 
+    prediction = predict_interviews_well([level, lang, tweets, phd])
+    if prediction is not None:
+        result = {"prediction": prediction} 
+        return jsonify(result), 200 
+    else:
+        return "Error making prediction", 400
+
+def tdidt_predict(header, tree, instance):
+    # returns "True" or "False" if a leaf node is hit
+    # None otherwise 
+    info_type = tree[0]
+    if info_type == "Attribute":
+        # get the value of this attribute for the instance
+        attribute_index = header.index(tree[1])
+        instance_value = instance[attribute_index]
+        for i in range(2, len(tree)):
+            value_list = tree[i]
+            if value_list[1] == instance_value:
+                # recurse, we have a match!!
+                return tdidt_predict(header, value_list[2], instance)
+    else: # Leaf
+        return tree[1] # label
+    
+
+def predict_interviews_well(instance):
+    # I need the tree and its header in order to make a prediction for instance
+    # import pickle.... depickle tree.p
+    infile = open("tree.p", "rb")
+    header, tree = pickle.load(infile)
+    infile.close()
+
+    print("header:", header)
+    print("tree:", tree)
+
+    # traverse the tree to make a prediction
+    # write a recursive algorithm to do this (predict() for PA6)
+    try:
+        return tdidt_predict(header, tree, instance)
+    except:
+        # something went wrong
+        return None 
+
 
 if __name__ == "__main__":
     # deployment notes
